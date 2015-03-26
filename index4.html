@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>cnavas</title>
+
+    </head>
+    <body>
+        <canvas id="demoCanvas" width="1000" height="1000">
+            <p>
+                hello
+            </p>
+        </canvas>
+        <script type="text/javascript">
+            var canvasDom = document.getElementById("demoCanvas");
+            var context = canvasDom.getContext('2d');
+/*            context.strokeStyle = "red";
+            context.strokeRect(10,10,190,100);
+            context.fillStyle = "blue";
+            context.fillRect(110,110,100,100);*/
+/*            context.beginPath();
+            context.moveTo(20,20);
+            context.lineTo(200,200);
+            context.lineTo(400,20);
+            context.closePath();
+            context.lineWidth = 2.0;
+            context.strokeStyle = "#CC0000";
+            context.stroke();*/
+            context.moveTo(200,200);
+            context.font = "Bold 50px Arial";
+            context.textAlign = "left";
+            context.fillStyle = "#005600";
+            context.fillText("甘雨虹同学",10,50);
+            context.strokeText("你好哇",10,100);
+/*            context.beginPath();
+            context.arc(60,60,50,0,Math.PI*2,true);
+            context.lineWidth = 2.0;
+            context.strokeStyle = "#132453";
+            context.stroke();*/
+            var image = new Image();
+            image.src = "img/a.jpg";
+            image.onload = function(){
+                context.drawImage(image,100,100);
+            }
+        </script>
+    </body>
+</html>
