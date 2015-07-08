@@ -1,15 +1,64 @@
 ---
 layout: default
 ---
-<div class="post">
 
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
-  </header>
 
-  <article class="post-content">
-    {{ content }}
-  </article>
+<section class="post">
+	{{ content }}
+</section>
 
-</div>
+<section class="meta">
+<span class="author">
+  <a href="http://blueandhack.com">{{ site.author }}</a>
+</span>
+<span class="time">
+  /
+  <time datetime="{{ page.date | date:"%m-%d-%Y" }}">{{ page.date | date:"%m-%d-%Y" }}</time>
+</span>
+<br />
+<span class="license">
+  Published under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">(CC) BY-NC-SA</a>
+</span>
+
+{% if page.categories.size > 0 %}
+<span class="categories">
+  in categories
+  {% for cat in page.categories %}
+  <a href="{{ site.url }}/categories/#{{ cat }}" title="{{ cat }}">{{ cat }}</a>&nbsp;
+  {% endfor %}
+</span>
+{% endif %}
+{% if page.tags.size > 0 %}
+<span class="tags">
+  tagged with 
+  {% for tag in page.tags %}
+  <a href="{{ site.url }}/tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>&nbsp;
+  {% endfor %}
+</span>
+{% endif %}
+
+</section>
+{% include comments.html %}
+
+<script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+$(function(){
+  $(document).keydown(function(e) {
+    if (e.target.nodeName.toUpperCase() != 'BODY') return;
+    var url = false;
+        if (e.which == 37 || e.which == 74) {  // Left arrow and J
+            {% if page.previous %}
+        url = '{{ site.url }}{{ page.previous.url }}';
+        {% endif %}
+        }
+        else if (e.which == 39 || e.which == 75) {  // Right arrow and K
+            {% if page.next %}
+        url = '{{ site.url }}{{ page.next.url }}';
+        {% endif %}
+        }
+        if (url) {
+            window.location = url;
+        }
+  });
+})
+</script>
