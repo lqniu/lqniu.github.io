@@ -48,4 +48,8 @@ categories: paper
  1. 结论
 
 
+参考：Jekyll使用MathJax来显示数学式[1]
+
+[1]: http://www.cyukang.com/2013/03/03/try-mathjax.html "Jekyll使用MathJax来显示数学式"
+
 
