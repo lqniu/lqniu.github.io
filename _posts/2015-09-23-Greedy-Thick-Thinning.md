@@ -10,4 +10,4 @@ categories: study
 
 
 
-ref:Structure Learning of Bayesian Networks Using Heuristic Methods [http://ipcsit.com/vol45/047-ICIKM2012-M20002.pdf]
+ref:[Structure Learning of Bayesian Networks Using Heuristic Methods](http://ipcsit.com/vol45/047-ICIKM2012-M20002.pdf)
