@@ -6,6 +6,7 @@ categories: study, database
 ---
 
 1 裸连
+{% highlight java %}
 String sql = "select * from test";
 
 // 连接字符串，格式： "jdbc:数据库驱动名称://数据库服务器ip/数据库名称"
@@ -23,10 +24,11 @@ ResultSet  rs   = stmt.executeQuery(sql);
 rs.close();
 stmt.close();
 conn.close();
-
+{% endhighlight %}
 
 2 使用dbutils
 TestDB.java
+{% highlight java %}
 public class TestDB {
   //初始化数据源
 	private  static DataSource initDatasource(){
@@ -62,8 +64,9 @@ public class TestDB {
 		}
 	}
 }
-
+{% endhighlight %}
 City.java
+{% highlight java %}
 public class City {
 	private int city_id;
 	private String city;
@@ -101,3 +104,4 @@ public class City {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 }
+{% endhighlight %}
