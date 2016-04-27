@@ -9,6 +9,6 @@ baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://prettygyh.com" # the base hostname & protocol for your site
 twitter_username: neo
 github_username:  lqniu
-
+port: 5001
 # Build settings
 markdown: kramdown

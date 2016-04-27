@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Trajectory data mining An overview</title>
+  <meta name="description" content="作者：郑宇 Microsoft Research">
+     <link rel="icon" href="/favicon.ico"type=”image/x-icon”>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="canonical" href="http://prettygyh.com/paper/2015/07/10/Trajectory%20Data%20Mining-An%20Overview/">
+  <link rel="alternate" type="application/rss+xml" title="戈安" href="http://prettygyh.com/feed.xml" />
+</head>
+
+
+  <body>
+	<div id="container">
+		<div id="main" role="main">
+    	<header>
+        <h1>Trajectory data mining An overview</h1>
+</header>
+
+		<nav>
+        <span>
+          <a href="http://prettygyh.com">HOME</a>
+        </span>
+        <span>
+          <a href="/about/">ABOUT</a>
+        </span>
+        <span>
+          <a href="/categories/">CATEGORIES</a>
+        </span>
+        <span>
+          <a href="/guestbook/">GUESTBOOK</a>
+        </span>
+        <span>
+          <a href="/tags/">TAGS</a>
+        </span>
+        <span>
+          <a href="/links/">LINKS</a>
+        </span>
+        <span>
+          <a title="subscribe by RSS" class="" href="/feed.xml">SUBSCRIBE</a>
+        </span>
+      </nav>
+
+		<article class="content">
+        <section class="post">
+	<p>作者：郑宇 Microsoft Research</p>
+
+<ol>
+  <li>摘要</li>
+</ol>
+
+<p>随着定位和移动计算技术的发展，产生了大量的代表了人、交通工具和动物的移动空间轨迹数据，同时也产生了很多处理、管理和挖掘的技术和应用。
+ 本文主要提出了关于轨迹数据挖掘的系统调研，为这个研究话题提供一个概述。沿着轨迹数据产生、预处理、数据管理以及各种数据挖掘技术（例如模式挖掘、离群点探测以及轨迹分类）的研究路线，本文探索了这些方法之间的连接、联系以及区别。同时本文还介绍了一些轨迹数据向其他形式转换的方法，例如图、矩阵以及张量，这些形式可以应用到更多的数据挖掘和机器学习的方法。最后是一些公开的轨迹数据集。这篇调查可以描绘轨迹数据挖掘领域，有助于大家快速的了解这个领域。</p>
+
+<ol>
+  <li>简介</li>
+</ol>
+
+<p>空间轨迹数据是由地理空间中移动物体的轨迹，通常表示为一系列的按时间先后顺序排列的有序的点，例如<script type="math/tex">p_1\rightarrow p_2\rightarrow …\rightarrow p_n</script>，每个点都包括地理坐标信息和时间戳，比如<script type="math/tex">p=(x,y,t)</script>。
+ 首先在第二部分，我们把产生轨迹数据的来源分成四组，然后分别罗列了一些关键的应用。
+然后，在使用轨迹数据之前，我们还需要处理很多问题，比如噪声过滤，分段和地图匹配。这一步就是数据预处理，也是很多轨迹数据挖掘的基础步骤。噪声过滤的目标是去除轨迹数据中那些有可能是由于定位系统弱信号而产生的噪声点，比如在大峡谷中。轨迹压缩是为了把轨迹数据的大小压缩（为了在通信、处理以及存储中去除冗余）同时保证数据的有效性。停留点检测算法可以识别出一个移动物体在空间范围内停留了一定时间的位置。一个停留点比其他的点携带了更多的语义信息，可能代表了一个用户曾经去过的饭店或者一个购物商场。轨迹分割技术把一段轨迹根据时间，空间或者语义信息分割成为片段，以便于进行后续的聚类或者分类。地图匹配是为了把轨迹中的每个点映射到对应的产生点的道路上。我们将在第三章详细讲解预处理。
+很多在线应用需要即时地完成轨迹数据挖掘，需要高效的数据管理算法能够快速从大量的轨迹数据中检索出满足一定标准（例如时空的约束）的特定轨迹。通常有两类方法：最近邻和范围询问。前者和距离矩阵相关，比如两个轨迹之间的距离。另外，对于历史的和最近的轨迹数据，我们需要用不同的管理方法。我们将在第四节详细介绍轨迹数据的索引和检索。
+在前两步的基础上，我们可以执行挖掘任务了，比如轨迹模式挖掘，轨迹不确定性，离群点检测和分类：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1. 轨迹不确定性：
+物体在连续的运动，但是他们的位置只能离散的更新，那么在两次更新之间的物体的位置就不确定了。为了更好的利用轨迹数据，一系列的相关研究试图去建立模型来减少不确定性。相对应的，有一个研究分支为了研究如何保护用户的隐私。在第五节详细描述。
+2. 轨迹模式挖掘：
+大量的空间轨迹数据为我们提供了分析移动物体移动模式的机会，移动模式可以表现为一个独立的轨迹包含特定的模式或者一组轨迹共享相似的模式。在第六节，我们调研的文献关心四种模式：共同移动模式，轨迹聚类，周期性模式，frequent sequential patterns。
+3. 轨迹分类：
+使用监督学习方法，我们可以把轨迹或者轨迹片段分成几类，可以分成不同的活动或者不同的交通模式。我们在第七节举例说明
+4. 轨迹离群点检测：
+不同于频繁的出现于轨迹数据中的轨迹模式，轨迹离群点可以是一些轨迹或者片段在相似度矩阵中与其他轨迹有很大不同的轨迹同时，也可以是事件或者观察不符合预期的模式（例如交通拥堵），我们将在第八章详细介绍。 最后，除了以原始的格式来研究轨迹数据，我们还可以把轨迹数据转换成其他的格式，例如图、矩阵、或者张量。新的表示方法拓展了轨迹数据挖掘的方法。  1. 轨迹数据（Trajectory Date）  1. 数据预处理
+ 1. 噪声过滤
+ 1. 停留点检测
+ 1. 轨迹压缩
+ 1. 轨迹分割
+ 1. 地图匹配  1. 轨迹数据管理
+ 1. 轨迹数据索引与检索
+ 1. 轨迹的距离/相似度  1. 轨迹不确定性
+ 1. 消除不缺定性
+ 1. 隐私问题
+ 1. 轨迹不确定性  1. 轨迹模式挖掘
+ 1. 共同移动模式
+ 1. 轨迹聚类
+ 1. 有序序列模式挖掘
+ 1. 周期性模式挖掘  1. 轨迹分类  1. 轨迹数据中异常点检测
+ 1. 离群点检测
+ 1. 异常事件识别  1. 表达形式转换
+ 1. 从轨迹到图
+ 1. 从轨迹到矩阵
+ 1. 从轨迹到张量  1. 其他
+ 1. 公共轨迹数据集
+ 1. 相关会议和期刊
+ 1. 未来展望  1. 结论
+</code></pre>
+</div>
+
+<p>参考：Jekyll使用MathJax来显示数学式 <a href="http://www.cyukang.com/2013/03/03/try-mathjax.html" title="Jekyll使用MathJax来显示数学式">1</a></p>
+
+<p>http://www.cnblogs.com/wish123/p/3937851.html</p>
+
+
+</section>
+
+<section class="meta">
+<span class="author">
+  <a href="http://blueandhack.com"></a>
+</span>
+<span class="time">
+  /
+  <time datetime="07-10-2015">07-10-2015</time>
+</span>
+<br />
+<span class="license">
+  Published under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">(CC) BY-NC-SA</a>
+</span>
+
+
+<span class="categories">
+  in categories
+  
+  <a href="http://prettygyh.com/categories/#paper" title="paper">paper</a>&nbsp;
+  
+</span>
+
+
+
+</section>
+<section class="comment">
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'neo0'; // required: replace example with your forum shortname
+    var disqus_url = 'http://prettygyh.com/paper/2015/07/10/Trajectory%20Data%20Mining-An%20Overview/';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+<script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript"
+ src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript">
+$(function(){
+  $(document).keydown(function(e) {
+    if (e.target.nodeName.toUpperCase() != 'BODY') return;
+    var url = false;
+        if (e.which == 37 || e.which == 74) {  // Left arrow and J
+            
+        }
+        else if (e.which == 39 || e.which == 75) {  // Right arrow and K
+            
+        url = 'http://prettygyh.com/tool/2015/08/29/sublime2/';
+        
+        }
+        if (url) {
+            window.location = url;
+        }
+  });
+})
+</script>
+		</article>
+		</div>
+	</div>
+    <footer class="footer">
+
+  <div class="wrap">
+
+    <div class="footer-col1 column">
+          
+            <a href="https://github.com/lqniu">
+              <span class="icon github">
+                <svg class="github-icon-svg" viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+            </a>
+          
+
+    </div>
+
+
+    <div class="footer-col2 column">
+      <p class="text">© 2010-2015 powered by neo with <a href="http://jekyllrb.com">Jekyll</a>.</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

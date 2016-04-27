@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>JDBC连接postgresql数据库</title>
+  <meta name="description" content="1 裸连">
+     <link rel="icon" href="/favicon.ico"type=”image/x-icon”>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="canonical" href="http://prettygyh.com/database/2016/04/26/JDBC%E8%BF%9E%E6%8E%A5postgresql%E6%95%B0%E6%8D%AE%E5%BA%93/">
+  <link rel="alternate" type="application/rss+xml" title="戈安" href="http://prettygyh.com/feed.xml" />
+</head>
+
+
+  <body>
+	<div id="container">
+		<div id="main" role="main">
+    	<header>
+        <h1>JDBC连接postgresql数据库</h1>
+</header>
+
+		<nav>
+        <span>
+          <a href="http://prettygyh.com">HOME</a>
+        </span>
+        <span>
+          <a href="/about/">ABOUT</a>
+        </span>
+        <span>
+          <a href="/categories/">CATEGORIES</a>
+        </span>
+        <span>
+          <a href="/guestbook/">GUESTBOOK</a>
+        </span>
+        <span>
+          <a href="/tags/">TAGS</a>
+        </span>
+        <span>
+          <a href="/links/">LINKS</a>
+        </span>
+        <span>
+          <a title="subscribe by RSS" class="" href="/feed.xml">SUBSCRIBE</a>
+        </span>
+      </nav>
+
+		<article class="content">
+        <section class="post">
+	<p>1 裸连</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">sql</span> <span class="o">=</span> <span class="s">"select * from test"</span><span class="o">;</span>
+
+<span class="c1">// 连接字符串，格式： "jdbc:数据库驱动名称://数据库服务器ip/数据库名称"</span>
+<span class="n">String</span> <span class="n">url</span> <span class="o">=</span> <span class="s">"jdbc:postgresql://localhost/soft"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">username</span> <span class="o">=</span> <span class="s">"scott"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">password</span> <span class="o">=</span> <span class="s">"tiger"</span><span class="o">;</span>
+
+<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">""</span><span class="n">org</span><span class="o">.</span><span class="na">postgresql</span><span class="o">.</span><span class="na">Driver</span><span class="err">"</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span>
+
+<span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span><span class="n">url</span><span class="o">,</span> <span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">);</span> 
+<span class="n">Statement</span>  <span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">(</span><span class="n">ResultSet</span><span class="o">.</span><span class="na">TYPE_SCROLL_SENSITIVE</span>
+                                     <span class="o">,</span> <span class="n">ResultSet</span><span class="o">.</span><span class="na">CONCUR_UPDATABLE</span><span class="o">);</span>
+<span class="n">ResultSet</span>  <span class="n">rs</span>   <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span><span class="n">sql</span><span class="o">);</span>
+
+<span class="n">rs</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<span class="n">stmt</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+<span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();</span></code></pre></figure>
+
+<p>2 使用dbutils
+TestDB.java</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestDB</span> <span class="o">{</span>
+  <span class="c1">//初始化数据源</span>
+	<span class="kd">private</span>  <span class="kd">static</span> <span class="n">DataSource</span> <span class="n">initDatasource</span><span class="o">(){</span>
+		<span class="n">BasicDataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BasicDataSource</span><span class="o">();</span>
+		<span class="n">dataSource</span><span class="o">.</span><span class="na">setDriverClassName</span><span class="o">(</span><span class="s">"org.postgresql.Driver"</span><span class="o">);</span>
+		<span class="n">dataSource</span><span class="o">.</span><span class="na">setUsername</span><span class="o">(</span><span class="s">"postgres"</span><span class="o">);</span>
+		<span class="n">dataSource</span><span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="s">"111111"</span><span class="o">);</span>
+		<span class="n">dataSource</span><span class="o">.</span><span class="na">setUrl</span><span class="o">(</span><span class="s">"jdbc:postgresql://localhost/postgres"</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">dataSource</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="c1">//利用Queryrunner进行插入操作</span>
+	<span class="kd">public</span> <span class="n">Object</span> <span class="n">insert</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">,</span> <span class="n">Object</span> <span class="n">param</span><span class="o">[])</span> <span class="kd">throws</span> <span class="n">SQLException</span><span class="o">{</span>
+		<span class="n">DataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="n">initDatasource</span><span class="o">();</span>
+		<span class="n">QueryRunner</span> <span class="n">queryRunner</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QueryRunner</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">queryRunner</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span> <span class="n">param</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="c1">//利用Queryrunner进行查询操作</span>
+	<span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">City</span><span class="o">&gt;</span> <span class="n">queryList</span><span class="o">(</span><span class="n">String</span> <span class="n">sql</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">param</span><span class="o">,</span> <span class="n">Class</span> <span class="n">class1</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span><span class="o">{</span>
+		<span class="n">DataSource</span> <span class="n">dataSource</span> <span class="o">=</span> <span class="n">initDatasource</span><span class="o">();</span>
+		<span class="n">QueryRunner</span> <span class="n">queryRunner</span> <span class="o">=</span> <span class="k">new</span> <span class="n">QueryRunner</span><span class="o">(</span><span class="n">dataSource</span><span class="o">);</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">City</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">City</span><span class="o">&gt;)</span> <span class="n">queryRunner</span><span class="o">.</span><span class="na">query</span><span class="o">(</span><span class="n">sql</span><span class="o">,</span> <span class="k">new</span> <span class="n">BeanListHandler</span><span class="o">&lt;</span><span class="n">City</span><span class="o">&gt;(</span><span class="n">class1</span><span class="o">),</span><span class="n">param</span><span class="o">);</span>
+		<span class="k">return</span> <span class="n">list</span><span class="o">;</span>
+	<span class="o">}</span> 
+	<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"restriction"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="n">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+		<span class="c1">// TODO Auto-generated method stub</span>
+		<span class="n">TestDB</span> <span class="n">testDB</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TestDB</span><span class="o">();</span>
+		<span class="c1">//简单的ORM，可以将查询结果转换为City类</span>
+		<span class="n">List</span><span class="o">&lt;</span><span class="n">City</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">testDB</span><span class="o">.</span><span class="na">queryList</span><span class="o">(</span><span class="s">"select * from City "</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">City</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+		<span class="k">for</span> <span class="o">(</span><span class="n">Iterator</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">list</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span> <span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">();)</span> <span class="o">{</span>
+			<span class="n">City</span> <span class="n">city</span> <span class="o">=</span> <span class="o">(</span><span class="n">City</span><span class="o">)</span> <span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">city</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>City.java</p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">City</span> <span class="o">{</span>
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">city_id</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">String</span> <span class="n">city</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="kt">int</span> <span class="n">counttry_id</span><span class="o">;</span>
+	<span class="kd">private</span> <span class="n">Date</span> <span class="n">last_update</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="n">getCity_id</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">city_id</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="n">setCity_id</span><span class="o">(</span><span class="kt">int</span> <span class="n">city_id</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">city_id</span> <span class="o">=</span> <span class="n">city_id</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="n">getCity</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">city</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="n">setCity</span><span class="o">(</span><span class="n">String</span> <span class="n">city</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">city</span> <span class="o">=</span> <span class="n">city</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">int</span> <span class="n">getCounttry_id</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">counttry_id</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="n">setCounttry_id</span><span class="o">(</span><span class="kt">int</span> <span class="n">counttry_id</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">counttry_id</span> <span class="o">=</span> <span class="n">counttry_id</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Date</span> <span class="n">getLast_update</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">last_update</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="n">setLast_update</span><span class="o">(</span><span class="n">Date</span> <span class="n">last_update</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">last_update</span> <span class="o">=</span> <span class="n">last_update</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="n">toString</span><span class="o">()</span> <span class="o">{</span>
+		<span class="c1">// TODO Auto-generated method stub</span>
+		<span class="c1">//利用ToStringBuilder可以方便的为自定义的类生成toString方法,JSON_STYLE相当于直接转换为json字符串</span>
+		<span class="c1">//ref http://commons.apache.org/proper/commons-lang/apidocs/org/apache/commons/lang3/builder/ToStringStyle.html</span>
+		<span class="k">return</span> <span class="n">ToStringBuilder</span><span class="o">.</span><span class="na">reflectionToString</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">ToStringStyle</span><span class="o">.</span><span class="na">JSON_STYLE</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+</section>
+
+<section class="meta">
+<span class="author">
+  <a href="http://blueandhack.com"></a>
+</span>
+<span class="time">
+  /
+  <time datetime="04-26-2016">04-26-2016</time>
+</span>
+<br />
+<span class="license">
+  Published under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">(CC) BY-NC-SA</a>
+</span>
+
+
+<span class="categories">
+  in categories
+  
+  <a href="http://prettygyh.com/categories/#database" title="database">database</a>&nbsp;
+  
+</span>
+
+
+
+</section>
+<section class="comment">
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'neo0'; // required: replace example with your forum shortname
+    var disqus_url = 'http://prettygyh.com/database/2016/04/26/JDBC%E8%BF%9E%E6%8E%A5postgresql%E6%95%B0%E6%8D%AE%E5%BA%93/';
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+<script src="https://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript"
+ src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<script type="text/javascript">
+$(function(){
+  $(document).keydown(function(e) {
+    if (e.target.nodeName.toUpperCase() != 'BODY') return;
+    var url = false;
+        if (e.which == 37 || e.which == 74) {  // Left arrow and J
+            
+        url = 'http://prettygyh.com/work/study/2015/09/28/work/';
+        
+        }
+        else if (e.which == 39 || e.which == 75) {  // Right arrow and K
+            
+        }
+        if (url) {
+            window.location = url;
+        }
+  });
+})
+</script>
+		</article>
+		</div>
+	</div>
+    <footer class="footer">
+
+  <div class="wrap">
+
+    <div class="footer-col1 column">
+          
+            <a href="https://github.com/lqniu">
+              <span class="icon github">
+                <svg class="github-icon-svg" viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+            </a>
+          
+
+    </div>
+
+
+    <div class="footer-col2 column">
+      <p class="text">© 2010-2015 powered by neo with <a href="http://jekyllrb.com">Jekyll</a>.</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
