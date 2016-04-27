@@ -2,7 +2,8 @@
 layout: post
 title: "Greedy Thick Thinning算法"
 date:   2015-09-23 09:02:53
-categories: study
+categories: research
+tags: algorithm
 ---
 #Greedy Thick Thinning
 The Greedy Tick Thinning algorithm starts with an empty gtaph and repeatedly adds the arc that

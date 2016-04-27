@@ -2,7 +2,8 @@
 layout: post
 title: "JDBC连接postgresql数据库"
 date:   2016-04-26 15:49:53
-categories: database
+categories: work
+tags: database java
 ---
 
 1 裸连
