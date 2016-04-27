@@ -6,7 +6,7 @@ layout: page
 
 <div id='tag_cloud'>
 {% for tag in site.tags %}
-<a href="#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">{{ tag[0] }}</a>
+<a href="#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}"> {{ tag[0] }} </a>
 {% endfor %}
 </div>
 
@@ -25,9 +25,9 @@ layout: page
 <script src="//upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script> 
 <script src="/javascript/jquery.tagcloud.js" type="text/javascript" charset="utf-8"></script> 
 <script language="javascript">
-$.fn.tagcloud.defaults = {
+$.fn.tagcloud.default={
     size: {start: 1, end: 1, unit: 'em'},
-      color: {start: '#f8e0e6', end: '#ff3333'}
+    color: {start: '#f8e0e6', end: '#ff3333'}
 };
 
 $(function () {
