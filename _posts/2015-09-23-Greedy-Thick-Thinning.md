@@ -5,7 +5,9 @@ date:   2015-09-23 09:02:53
 categories: research
 tags: algorithm
 ---
+
 #Greedy Thick Thinning
+
 The Greedy Tick Thinning algorithm starts with an empty gtaph and repeatedly adds the arc that
 maximally increases the bayesian metric until no arc addition will result in an increase. Then it repeatedly
 removes arcs until no arc deletion will result in an increase in the bayesian metric. Thus, the model produced
