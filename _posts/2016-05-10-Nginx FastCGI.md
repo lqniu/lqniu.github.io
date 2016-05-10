@@ -16,13 +16,11 @@ ls
 make
 make install
 {% endhighlight %}
-
 2. 安装fcgi Lib 官网已经不能访问
 
 {% highlight bash %}
 yum install fcgi-devel -y
 {% endhighlight %}
-
 3. 新建CGI程序demo
 main.cpp
 
@@ -53,7 +51,6 @@ int main(void){
   return 0;
 }
 {% endhighlight %}
-
 4. 编译，并用spawn-fcgi生成10个cgi子进程
 
 {% highlight bash %}
@@ -62,7 +59,6 @@ spawn-fcgi -a 127.0.0.1 -p 8080 -f demo -F 10
 {% endhighlight %}
 
 5. 在nginx配置文件中进行配置
-
 {% highlight bash %}
 location ~.*\.cgi$ {
   fastcgi_pass 127.0.0.1:8080;
@@ -70,7 +66,6 @@ location ~.*\.cgi$ {
   include fastcgi.conf;
 }
 {% endhighlight %}
-
 6. 重启Nginx
 
 {% highlight bash %}
@@ -78,6 +73,7 @@ nginx -s reloadls
 {% endhighlight %}
 
 两次请求是由不同的进程响应
+
 Request number 2418 running on host localhost Process Id: 28850
 Request number 2283 running on host localhost Process Id: 28853
 
