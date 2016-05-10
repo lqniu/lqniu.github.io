@@ -1,8 +1,9 @@
 ---
 layout: post
-title: Nginx
-date: 2016-05-10 14:38:00
-category: coding
-tags: tools
+title: "Nginx"
+date:   2016-05-09 15:49:53
+categories: work
+tags: database java
 ---
-#sublime2 注册码
+
+1 裸连
