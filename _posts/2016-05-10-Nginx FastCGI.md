@@ -6,6 +6,7 @@ categories: work
 tags: Nginx Linux
 ---
 
+1. 安装spawn-fcgi spawn-fcgi是一个通用的FastCGI进程管理器
 {% highlight bash %}
 wget http://download.lighttpd.net/spawn-fcgi/releases-1.6.x/spawn-fcgi-1.6.4.tar.gz
 tar -xzvf spawn-fcgi-1.6.4.tar.gz
@@ -16,23 +17,14 @@ make
 make install
 {% endhighlight %}
 
+2. 安装fcgi Lib 官网已经不能访问
+
 {% highlight bash %}
 yum install fcgi-devel -y
 {% endhighlight %}
 
-{% highlight bash %}
-g++ main.cpp -o demo -lfcgi
-spawn-fcgi -a 127.0.0.1 -p 8080 -f demo
-nginx -s reloadls
-{% endhighlight %}
-
-{% highlight bash %}
-location ~.*\.cgi$ {
-  fastcgi_pass 127.0.0.1:8080;
-  fastcgi_index index.cgi;
-  include fastcgi.conf;
-}
-{% endhighlight %}
+3. 新建CGI程序demo
+main.cpp
 
 {% highlight cpp %}
 #include "fcgi_stdio.h"
@@ -61,5 +53,32 @@ int main(void){
   return 0;
 }
 {% endhighlight %}
+
+4. 编译，并用spawn-fcgi生成10个cgi子进程
+
+{% highlight bash %}
+g++ main.cpp -o demo -lfcgi
+spawn-fcgi -a 127.0.0.1 -p 8080 -f demo -F 10
+{% endhighlight %}
+
+5. 在nginx配置文件中进行配置
+
+{% highlight bash %}
+location ~.*\.cgi$ {
+  fastcgi_pass 127.0.0.1:8080;
+  fastcgi_index index.cgi;
+  include fastcgi.conf;
+}
+{% endhighlight %}
+
+6. 重启Nginx
+
+{% highlight bash %}
+nginx -s reloadls
+{% endhighlight %}
+
+两次请求是由不同的进程响应
+Request number 2418 running on host localhost Process Id: 28850
+Request number 2283 running on host localhost Process Id: 28853
 
 ref:http://www.cnblogs.com/skynet/p/4173450.html
